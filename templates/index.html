@@ -15,10 +15,12 @@
     <div id="response"></div>
 
     <script>
-        document.getElementById('textForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const inputText = document.getElementById('inputText').value;
-            const response = document.getElementById('response');
+        const form = document.getElementById('textForm');
+        const textarea = document.getElementById('inputText');
+        const response = document.getElementById('response');
+
+        async function submitForm() {
+            const inputText = textarea.value;
 
             try {
                 const result = await fetch('/process', {
@@ -32,6 +34,18 @@
                 response.textContent = data.response;
             } catch (error) {
                 response.textContent = 'An error occurred while processing your request.';
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await submitForm();
+        });
+
+        textarea.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                await submitForm();
             }
         });
     </script>
